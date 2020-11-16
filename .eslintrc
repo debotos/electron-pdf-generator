@@ -1,0 +1,63 @@
+{
+	"env": {
+		"browser": true,
+		"node": true,
+		"es6": true,
+		"es2017": true,
+		"es2020": true,
+		"jest": true
+	},
+	"parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+	"parserOptions": {
+		"ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+		"sourceType": "module", // Allows for the use of imports
+		"ecmaFeatures": {
+			"jsx": true // Allows for the parsing of JSX
+		}
+	},
+	"settings": {
+		"react": {
+			"version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+		},
+		"import/resolver": {
+			"eslint-import-resolver-custom-alias": {
+				"alias": {
+					"@": "./src",
+					"@main": "./src/main",
+					"@renderer": "./src/renderer",
+					"@assets": "./src/assets",
+					"@utils": "./src/utils",
+					"@app": "./src/renderer/app",
+					"@components": "./src/renderer/components",
+					"@screens": "./src/renderer/screens"
+				},
+				"extensions": [".js", ".jsx", ".ts", ".tsx"]
+			},
+			"node": {
+				"extensions": [".js", ".jsx", ".ts", ".tsx"],
+				"moduleDirectory": ["node_modules", "src/"]
+			}
+		}
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"prettier/@typescript-eslint",
+		"plugin:prettier/recommended", // Make sure that plugin:prettier/recommended is the last configuration in the extends array
+		"plugin:import/typescript"
+	],
+	"plugins": ["@typescript-eslint", "react", "prettier", "module-resolver"],
+	"rules": {
+		"react/jsx-uses-react": "error",
+		"react/jsx-uses-vars": "error",
+		"react/jsx-no-duplicate-props": [2, { "ignoreCase": true }],
+		"react/jsx-pascal-case": [2, { "allowAllCaps": true }],
+		"@typescript-eslint/no-unused-vars": "error",
+		"module-resolver/use-alias": 2,
+		"import/no-named-as-default": 0
+	}
+}

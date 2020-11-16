@@ -1,0 +1,22 @@
+{
+	"presets": ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
+	"plugins": [
+		"react-hot-loader/babel",
+		[
+			"module-resolver",
+			{
+				"root": ["./"],
+				"alias": {
+					"@": "./src",
+					"@main": "./src/main",
+					"@renderer": "./src/renderer",
+					"@assets": "./src/assets",
+					"@utils": "./src/utils",
+					"@app": "./src/renderer/app",
+					"@components": "./src/renderer/components",
+					"@screens": "./src/renderer/screens"
+				}
+			}
+		]
+	]
+}
