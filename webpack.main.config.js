@@ -15,7 +15,7 @@ module.exports = {
 	mode: 'development',
 	devtool: 'source-map',
 	target: 'electron-main',
-	entry: './src/main/index.ts',
+	entry: ['react-hot-loader/patch', './src/main/index.ts'],
 	// Put your normal webpack config below here
 	module: {
 		rules: require('./webpack.rules'),
