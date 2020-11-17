@@ -83,11 +83,11 @@
 		}
 	},
 	"dependencies": {
+		"antd": "^4.8.4",
 		"electron-squirrel-startup": "^1.0.0",
 		"react": "17.0.0",
 		"react-dom": "17.0.0",
-		"react-router-dom": "^5.2.0",
-		"remove": "^0.1.5"
+		"react-router-dom": "^5.2.0"
 	},
 	"devDependencies": {
 		"@babel/core": "7.0.0",
@@ -125,6 +125,8 @@
 		"fork-ts-checker-webpack-plugin": "^3.1.1",
 		"husky": "^4.2.5",
 		"jest": "^26.0.1",
+		"less": "^3.12.2",
+		"less-loader": "^7.1.0",
 		"node-loader": "^0.6.0",
 		"node-sass": "^4.14.1",
 		"prettier": "^2.0.5",

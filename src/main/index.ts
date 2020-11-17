@@ -10,10 +10,11 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = (): void => {
 	// Create the browser window.
+	const icon = path.join(app.getAppPath(), 'src/assets/logo.png')
 	const mainWindow = new BrowserWindow({
 		height: 600,
 		width: 800,
-		icon: path.join(app.getAppPath(), 'src/assets/logo.png'),
+		icon,
 		webPreferences: {
 			worldSafeExecuteJavaScript: true,
 			contextIsolation: true,
