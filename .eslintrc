@@ -54,6 +54,8 @@
 	"rules": {
 		"react/jsx-uses-react": "error",
 		"react/jsx-uses-vars": "error",
+		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/explicit-function-return-type": "off",
 		"react/jsx-no-duplicate-props": [2, { "ignoreCase": true }],
 		"react/jsx-pascal-case": [2, { "allowAllCaps": true }],
 		"@typescript-eslint/no-unused-vars": "error",

@@ -1,18 +1,19 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { hot } from 'react-hot-loader/root'
 
 import './App.less'
-import { AppRoutes } from './AppRoutes'
-import Body from '../components/containers/Body'
+import AppRoutes from './AppRoutes'
+import Body from '@components/containers/Body'
+import ErrorBoundary from '@components/ErrorBoundary'
 
-export class App extends Component {
-	render(): JSX.Element {
-		return (
+const App = () => {
+	return (
+		<ErrorBoundary>
 			<Body>
 				<AppRoutes />
 			</Body>
-		)
-	}
+		</ErrorBoundary>
+	)
 }
 
 export default hot(App)

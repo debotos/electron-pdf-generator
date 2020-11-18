@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 
@@ -8,16 +8,20 @@ if (require('electron-squirrel-startup')) {
 	app.quit()
 }
 
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow: any
+
 const createWindow = (): void => {
 	// Create the browser window.
 	const icon = path.join(app.getAppPath(), 'src/assets/logo.png')
-	const mainWindow = new BrowserWindow({
+	mainWindow = new BrowserWindow({
 		height: 600,
 		width: 800,
 		icon,
+		title: 'PDF Generator',
 		webPreferences: {
-			worldSafeExecuteJavaScript: true,
-			contextIsolation: true,
+			nodeIntegration: true,
 		},
 	})
 
@@ -52,3 +56,9 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.on('generatePDF:start', (_, data: any) => {
+	console.log('Got data to generate PDF:', data)
+	mainWindow.webContents.send('generatePDF:end', {
+		message: 'Communication Successful!',
+	})
+})

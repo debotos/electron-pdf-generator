@@ -9,10 +9,11 @@ const Header = (): JSX.Element => {
 	)
 }
 
-export default Header
+export default React.memo(Header)
 
 const HeaderContainer = styled.header`
 	text-align: center;
 	padding: 10px 0;
 	background: lightcyan;
+	user-select: none;
 `

@@ -1,9 +1,9 @@
 import React from 'react'
 import { HashRouter, Switch, Route } from 'react-router-dom'
 
-import Home from '@screens/Home'
+import Home from '@screens/home/Home'
 
-export const AppRoutes: React.FC<{}> = (): JSX.Element => {
+const AppRoutes = () => {
 	return (
 		// Not BrowserRouter
 		<HashRouter>
@@ -13,3 +13,5 @@ export const AppRoutes: React.FC<{}> = (): JSX.Element => {
 		</HashRouter>
 	)
 }
+
+export default AppRoutes
