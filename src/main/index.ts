@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import path from 'path'
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 
@@ -56,9 +56,3 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on('generatePDF:start', (_, data: any) => {
-	console.log('Got data to generate PDF:', data)
-	mainWindow.webContents.send('generatePDF:end', {
-		message: 'Communication Successful!',
-	})
-})

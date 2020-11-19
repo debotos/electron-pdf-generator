@@ -5,3 +5,4 @@ images
 out
 .webpack
 dist
+global.d.ts

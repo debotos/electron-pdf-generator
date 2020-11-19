@@ -8,13 +8,16 @@
 		"Segoe",
 		"ULFO",
 		"anticon",
+		"bolditalics",
 		"craco",
 		"devtool",
 		"icns",
 		"marshallofsound",
 		"onstatechange",
 		"onupdatefound",
+		"pdfmake",
 		"precached",
-		"relocator"
+		"relocator",
+		"valign"
 	]
 }
