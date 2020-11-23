@@ -8,6 +8,7 @@ import { TDocumentDefinitions, Content } from 'pdfmake/interfaces'
 
 import Header from '@components/header/Header'
 import { isEmpty, getBase64 } from '@/utils/helpers'
+import Notification from '@/utils/notification'
 
 interface CState {
 	fileList: any[]
@@ -62,7 +63,13 @@ class Home extends Component<CProps, CState> {
 
 			pdfMake
 				.createPdf(docDefinition, {}, PDF_FONTS, pdfFonts.pdfMake.vfs)
-				.download(filePath, () => message.success('Successfully generated PDF!'))
+				.download(filePath, () => {
+					message.success('Successfully generated PDF!')
+					Notification.show({
+						title: 'PDF Generator',
+						body: 'Successfully generated PDF!',
+					})
+				})
 
 			this.setState({ fileList: [] }) // Clear
 		} catch (error) {

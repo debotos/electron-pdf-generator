@@ -10,3 +10,4 @@ declare module '*.png' {
 
 type PDFPageMargins = [number, number, number, number] // [left, top, right, bottom]
 type PDFPageLayout = { width: number; height: number | 'auto'; margins: PDFPageMargins }
+type NotificationMessage = { title: string; body: string }

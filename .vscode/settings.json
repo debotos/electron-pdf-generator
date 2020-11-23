@@ -18,6 +18,7 @@
 		"pdfmake",
 		"precached",
 		"relocator",
+		"submenu",
 		"valign"
 	]
 }

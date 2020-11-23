@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain, Notification, Menu, Tray } from 'electron'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 const isDev = !app.isPackaged
@@ -10,35 +10,77 @@ if (require('electron-squirrel-startup')) {
 	app.quit()
 }
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow: any
+app.setName('PDF Generator')
 
-const createWindow = (): void => {
-	// Create the browser window.
-	const icon = path.join(app.getAppPath(), 'src/assets/logo.png')
-	mainWindow = new BrowserWindow({
-		height: 600,
-		width: 800,
-		icon,
+const dockIcon = path.join(app.getAppPath(), 'src/assets/logo.png')
+const trayIcon = path.join(app.getAppPath(), 'src/assets/tray_icon.png')
+
+const createSplashWindow = () => {
+	const win = new BrowserWindow({
+		width: 400,
+		height: 200,
+		frame: false,
+		transparent: true,
+		webPreferences: {
+			nodeIntegration: false,
+			worldSafeExecuteJavaScript: true,
+			contextIsolation: true,
+		},
+	})
+
+	win.loadFile(path.join(app.getAppPath(), 'public/splash/index.html'))
+	return win
+}
+
+const createWindow = () => {
+	const win = new BrowserWindow({
+		height: 800,
+		width: 1000,
+		icon: dockIcon,
 		title: 'PDF Generator',
 		backgroundColor: '#fff',
 		webPreferences: {
-			nodeIntegration: true,
+			nodeIntegration: false,
+			preload: './preload',
 		},
 	})
 
 	// and load the index.html of the app.
-	mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+	win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
 	// Open the DevTools.
-	isDev && mainWindow.webContents.openDevTools()
+	isDev && win.webContents.openDevTools()
+
+	return win
+}
+
+if (process.platform === 'darwin') {
+	app.dock.setIcon(dockIcon)
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+let tray = null
+app.whenReady().then(() => {
+	const template = require('./menu').createTemplate(app)
+	const menu = Menu.buildFromTemplate(template)
+	Menu.setApplicationMenu(menu)
+
+	tray = new Tray(trayIcon)
+	tray.setContextMenu(menu)
+
+	const splash = createSplashWindow()
+	const mainApp = createWindow()
+
+	mainApp.hide()
+	mainApp.once('ready-to-show', () => {
+		setTimeout(() => {
+			splash.destroy()
+			mainApp.show()
+		}, 2000)
+	})
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -59,3 +101,11 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.on('notify', (_, message: NotificationMessage) => {
+	const { title, body } = message
+	new Notification({ title, body }).show()
+})
+
+ipcMain.on('app-quit', () => {
+	app.quit()
+})
