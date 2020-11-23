@@ -42,7 +42,7 @@ module.exports = [
 		},
 	},
 	{
-		test: /\.(jpg|png|woff|woff2|eot|ttf)$/,
+		test: /\.(jpg|png|gif|woff|woff2|eot|ttf)$/,
 		loader: 'url-loader',
 		options: {
 			name: '[path][name].[ext]',

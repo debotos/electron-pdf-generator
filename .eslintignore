@@ -6,3 +6,4 @@ out
 .webpack
 dist
 global.d.ts
+webpack.*

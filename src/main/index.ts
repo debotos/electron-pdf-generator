@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, BrowserWindow, ipcMain, Notification, Menu, Tray } from 'electron'
+import { app, BrowserWindow, ipcMain, Notification, Menu, Tray, nativeImage } from 'electron'
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 const isDev = !app.isPackaged
@@ -12,8 +12,9 @@ if (require('electron-squirrel-startup')) {
 
 app.setName('PDF Generator')
 
-const dockIcon = path.join(app.getAppPath(), 'src/assets/logo.png')
-const trayIcon = path.join(app.getAppPath(), 'src/assets/tray_icon.png')
+console.log(path.join(__dirname, '..', 'public/images/logo.png'))
+const dockIcon = path.join(__dirname, '..', 'public/images/logo.png')
+const trayIcon = path.join(__dirname, '..', 'public/images/tray_icon.png')
 
 const createSplashWindow = () => {
 	const win = new BrowserWindow({
@@ -28,7 +29,7 @@ const createSplashWindow = () => {
 		},
 	})
 
-	win.loadFile(path.join(app.getAppPath(), 'public/splash/index.html'))
+	win.loadFile(path.join(__dirname, '..', 'public/splash/index.html'))
 	return win
 }
 
@@ -55,7 +56,7 @@ const createWindow = () => {
 }
 
 if (process.platform === 'darwin') {
-	app.dock.setIcon(dockIcon)
+	app.dock.setIcon(nativeImage.createFromPath(dockIcon))
 }
 
 // This method will be called when Electron has finished
@@ -67,7 +68,7 @@ app.whenReady().then(() => {
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
 
-	tray = new Tray(trayIcon)
+	tray = new Tray(nativeImage.createFromPath(trayIcon))
 	tray.setContextMenu(menu)
 
 	const splash = createSplashWindow()
