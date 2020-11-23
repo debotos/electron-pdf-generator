@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { nanoid } from 'nanoid'
-import { Button, message, Row, Upload } from 'antd'
 import { InboxOutlined } from '@ant-design/icons'
 import * as pdfMake from 'pdfmake/build/pdfmake'
 import * as pdfFonts from 'pdfmake/build/vfs_fonts'
-
+import { Button, message, Row, Upload } from 'antd'
 // eslint-disable-next-line import/no-unresolved
 import { TDocumentDefinitions, Content } from 'pdfmake/interfaces'
 
@@ -12,7 +10,7 @@ import Header from '@components/header/Header'
 import { isEmpty, getBase64 } from '@/utils/helpers'
 
 interface CState {
-	selectedFiles: any[]
+	fileList: any[]
 	processing: boolean
 }
 
@@ -20,6 +18,7 @@ type CProps = {}
 
 const { Dragger } = Upload
 const PDF_FONTS = {
+	// This if just for reference. Already available via 'pdfFonts' via base64 format
 	Roboto: {
 		normal: 'Roboto-Regular.ttf',
 		bold: 'Roboto-Medium.ttf',
@@ -31,21 +30,21 @@ const PDF_FONTS = {
 class Home extends Component<CProps, CState> {
 	constructor(props: CProps) {
 		super(props)
-		this.state = { selectedFiles: [], processing: false }
+		this.state = { fileList: [], processing: false }
 	}
 
 	generatePDF = async () => {
 		try {
 			this.setState({ processing: true })
-			const { selectedFiles } = this.state
-			// console.log('Data to generate PDF:', selectedFiles)
+			const { fileList } = this.state
+			// console.log('Data to generate PDF:', fileList)
 
 			// Create a document definition
 			const pageMargins: PDFPageMargins = [40, 60, 40, 60] // [left, top, right, bottom]
 			const pageLayout: PDFPageLayout = { width: 612, height: 'auto', margins: pageMargins }
 			const pdfContent: Content = []
-			for (const singleFile of selectedFiles) {
-				const base64Data = await getBase64(singleFile.file)
+			for (const singleFile of fileList) {
+				const base64Data = await getBase64(singleFile.originFileObj)
 				pdfContent.push({
 					image: base64Data as string,
 					alignment: 'center',
@@ -64,6 +63,8 @@ class Home extends Component<CProps, CState> {
 			pdfMake
 				.createPdf(docDefinition, {}, PDF_FONTS, pdfFonts.pdfMake.vfs)
 				.download(filePath, () => message.success('Successfully generated PDF!'))
+
+			this.setState({ fileList: [] }) // Clear
 		} catch (error) {
 			console.log(error)
 			message.error('Something went wrong. Try again!')
@@ -73,13 +74,12 @@ class Home extends Component<CProps, CState> {
 	}
 
 	handleOnChange = ({ fileList }: any) => {
-		if (fileList.length === 0) return this.setState({ selectedFiles: [] })
-		const selectedFiles = fileList.map((file: any) => ({ file: file.originFileObj, id: nanoid() }))
-		this.setState({ selectedFiles })
+		if (isEmpty(fileList)) return this.setState({ fileList: [] })
+		this.setState({ fileList: [...fileList] })
 	}
 
 	render(): JSX.Element {
-		const { selectedFiles, processing } = this.state
+		const { fileList, processing } = this.state
 
 		return (
 			<>
@@ -90,22 +90,23 @@ class Home extends Component<CProps, CState> {
 						name='file-picker'
 						multiple={true}
 						beforeUpload={() => false} /* To stop the default upload behavior */
+						fileList={fileList}
 						onChange={this.handleOnChange}
 					>
 						<p className='ant-upload-drag-icon'>
 							<InboxOutlined />
 						</p>
 						<p className='ant-upload-text'>
-							Click or drag PNG/JPEG images to this area to process💡
+							Click or drag PNG/JPEG images to this area to process 💡
 						</p>
 						<p className='ant-upload-hint'></p>
 					</Dragger>
 				</div>
 
-				<Row justify='center' className='my-3'>
+				<Row justify='center' className='mt-3'>
 					<Button
 						type='primary'
-						disabled={isEmpty(selectedFiles)}
+						disabled={isEmpty(fileList)}
 						loading={processing}
 						onClick={this.generatePDF}
 					>

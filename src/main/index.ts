@@ -1,6 +1,8 @@
-import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import { app, BrowserWindow } from 'electron'
+
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
+const isDev = !app.isPackaged
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -20,6 +22,7 @@ const createWindow = (): void => {
 		width: 800,
 		icon,
 		title: 'PDF Generator',
+		backgroundColor: '#fff',
 		webPreferences: {
 			nodeIntegration: true,
 		},
@@ -29,7 +32,7 @@ const createWindow = (): void => {
 	mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools()
+	isDev && mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
