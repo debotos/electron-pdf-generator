@@ -12,9 +12,12 @@ if (require('electron-squirrel-startup')) {
 
 app.setName('PDF Generator')
 
-console.log(path.join(__dirname, '..', 'public/images/logo.png'))
-const dockIcon = path.join(__dirname, '..', 'public/images/logo.png')
-const trayIcon = path.join(__dirname, '..', 'public/images/tray_icon.png')
+const dockIcon = isDev
+	? 'public/images/logo.png'
+	: path.join(__dirname, '..', 'public/images/logo.png')
+const trayIcon = isDev
+	? 'public/images/tray_icon.png'
+	: path.join(__dirname, '..', 'public/images/tray_icon.png')
 
 const createSplashWindow = () => {
 	const win = new BrowserWindow({
@@ -29,7 +32,9 @@ const createSplashWindow = () => {
 		},
 	})
 
-	win.loadFile(path.join(__dirname, '..', 'public/splash/index.html'))
+	win.loadFile(
+		isDev ? 'public/splash/index.html' : path.join(__dirname, '..', 'public/splash/index.html')
+	)
 	return win
 }
 
